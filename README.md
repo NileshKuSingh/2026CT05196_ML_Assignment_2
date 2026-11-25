@@ -6,7 +6,7 @@
 
 ## 1. Problem Statement
 
-Colleges and universities lose a lot of students before they finish their degrees, and spotting who might drop out early helps advisors step in before it's too late. Here I set this up as a 3-class classification problem (`Graduate`, `Dropout`, `Enrolled`) using student background details, finances, and early semester grades. I trained and compared five models—Logistic Regression, Decision Tree, kNN, Naive Bayes, and Random Forest—across six metrics.
+Colleges and universities lose a lot of students before they finish their degrees, and spotting who might drop out early helps advisors step in before it's too late. Here I set this up as a 3-class classification problem (`Graduate`, `Dropout`, `Enrolled`) using student background details, finances, and early semester grades. I trained and compared five models—Logistic Regression, Decision Tree, kNN, Naive Bayes, and Random Forest-across six metrics.
 
 ---
 
@@ -36,7 +36,7 @@ All five models were evaluated on the exact same 80:20 stratified test split (`t
 | **kNN** | 0.7040 | 0.8406 | 0.6886 | 0.7040 | 0.6849 | 0.5042 |
 | **Naive Bayes** | 0.2441 | 0.7070 | 0.5284 | 0.2441 | 0.1662 | 0.1221 |
 | **Random Forest** | 0.7537 | **0.9038** | 0.7287 | 0.7537 | 0.7303 | 0.5893 |
----
+
 
 ---
 ## 4. Graph Representation of Evaluation Metrics
