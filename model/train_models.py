@@ -3,6 +3,7 @@ import re
 import joblib
 import pandas as pd
 from sklearn.compose import ColumnTransformer
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.impute import SimpleImputer
 from sklearn.linear_model import LogisticRegression
 from sklearn.metrics import (
@@ -14,6 +15,7 @@ from sklearn.metrics import (
     roc_auc_score,
 )
 from sklearn.model_selection import train_test_split
+from sklearn.naive_bayes import GaussianNB
 from sklearn.neighbors import KNeighborsClassifier
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import LabelEncoder, OneHotEncoder, StandardScaler
@@ -104,16 +106,18 @@ def main():
 
     prep = make_prep(num_cols, cat_cols)
 
-    # First batch: linear baseline, single tree, and nearest neighbors
-    first_batch = {
+    # All 5 required classifiers on the same dataset and split
+    all_models = {
         "Logistic Regression": (LogisticRegression(max_iter=2000, random_state=seed), "logreg.joblib"),
         "Decision Tree": (DecisionTreeClassifier(max_depth=10, random_state=seed), "dtree.joblib"),
         "kNN": (KNeighborsClassifier(n_neighbors=7), "knn.joblib"),
+        "Naive Bayes": (GaussianNB(), "nb.joblib"),
+        "Random Forest": (RandomForestClassifier(n_estimators=200, random_state=seed), "rf.joblib"),
     }
 
     rows = []
-    for model_label, (clf, save_name) in first_batch.items():
-        # Fitting inside Pipeline avoids data leakage from test data
+    for model_label, (clf, save_name) in all_models.items():
+        # Fitting inside Pipeline keeps preprocessing fitted strictly on X_train
         pipe = Pipeline([("prep", prep), ("clf", clf)])
         pipe.fit(X_train, y_train)
         joblib.dump(pipe, out_dir / save_name)
@@ -121,7 +125,7 @@ def main():
         rows.append({"ML Model Name": model_label, **scores})
 
     res_df = pd.DataFrame(rows)
-    res_df.to_csv(out_dir / "metrics_part1.csv", index=False)
+    res_df.to_csv(out_dir / "metrics_summary.csv", index=False)
     print(res_df.to_string(index=False))
 
 
